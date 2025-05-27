@@ -1,40 +1,25 @@
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { ProfileModule } from './profile/profile.module';
-
-// @Module({
-//   controllers: [AppController],
-//   providers: [AppService],
-//   imports: [ProfileModule],
-// })
-// export class AppModule {}
-
-
-
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose'; // <-- add this import
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { ProfileModule } from './freelancer_profile/profile.module';
 import { ClientProfileModule } from './client_profile/client-profile.module';
 import { FreelancerProfileModule } from './freelancer_profile/freelancer-profile.module';
-
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
   imports: [
-    MongooseModule.forRoot('mongodb+srv://ayomideratata:FtHe7KRFaTxTGANu@cluster0.xtfl9hr.mongodb.net/'), // <-- add this line
-    // ProfileModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI', { infer: true }),
+      }),
+      inject: [ConfigService],
+    }),
     ClientProfileModule,
     FreelancerProfileModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
-
-
-// mongodb+srv://ayomideratata:FtHe7KRFaTxTGANu@cluster0.xtfl9hr.mongodb.net/
-
-
