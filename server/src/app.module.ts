@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClientProfileModule } from './client_profile/client-profile.module';
 import { FreelancerProfileModule } from './freelancer_profile/freelancer-profile.module';
+import { JobModule } from './job/job.module';
+import { BidModule } from './bids/bid.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -18,8 +20,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     ClientProfileModule,
     FreelancerProfileModule,
+    JobModule,
+    BidModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+
+
